@@ -8,11 +8,15 @@ use Erp\Bundle\SystemBundle\Model\SystemAccountInterface;
 
 use Erp\Bundle\SystemBundle\Model\SystemGroupInterface;
 
+use Erp\Bundle\SystemBundle\Model\SystemGroupTrait;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="system.group")
  */
-class SystemGroup extends SystemAccountBase implements SystemGroupInterface{
+class SystemGroup extends SystemAccount implements SystemGroupInterface{
+    use SystemGroupTrait;
+
     /**
      * @ORM\ManyToMany(targetEntity="SystemAccount", inversedBy="groups")
      * @ORM\JoinTable(name="system.groupaccount",
@@ -30,22 +34,5 @@ class SystemGroup extends SystemAccountBase implements SystemGroupInterface{
     public function __construct() {
         parent::__construct();
         $this->accounts = new ArrayCollection();
-    }
-
-    public function addSystemAccount(SystemAccountInterface $account)
-    {
-        $this->accounts[] = $account;
-
-        return $this;
-    }
-
-    public function removeSystemAccount(SystemAccountInterface $account)
-    {
-        $this->accounts->removeElement($account);
-    }
-
-    public function getSystemAccounts()
-    {
-        return $this->accounts->toArray();
     }
 }

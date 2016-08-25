@@ -5,11 +5,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Erp\Bundle\SystemBundle\Model\SystemUserInterface;
 
+use Erp\Bundle\SystemBundle\Model\SystemUserTrait;
 /**
  * @ORM\Entity
  * @ORM\Table(name="system.user")
  */
-class SystemUser extends SystemAccountBase implements SystemUserInterface{
+class SystemUser extends SystemAccount implements SystemUserInterface{
+    use SystemUserTrait;
+
     /**
      * @ORM\Column(type="string", length=256)
      *
@@ -29,29 +32,5 @@ class SystemUser extends SystemAccountBase implements SystemUserInterface{
      */
     public function __construct() {
         parent::__construct();
-    }
-
-    public function setSalt($salt)
-    {
-        $this->salt = $salt;
-
-        return $this;
-    }
-
-    public function getSalt()
-    {
-        return $this->salt;
-    }
-
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    public function getPassword()
-    {
-        return $this->password;
     }
 }

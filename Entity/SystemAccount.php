@@ -8,14 +8,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Erp\Bundle\SystemBundle\Model\SystemAccountRoleInterface;
 use Erp\Bundle\SystemBundle\Model\SystemGroupInterface;
 
-use Erp\Bundle\CoreBundle\Entity\CoreAccountBase;
+use Erp\Bundle\CoreBundle\Entity\CoreAccount;
 use Erp\Bundle\SystemBundle\Model\SystemAccountInterface;
 
+use Erp\Bundle\SystemBundle\Model\SystemAccountTrait;
 /**
  * @ORM\Entity
  * @ORM\Table(name="system.account")
+ * @ORM\InheritanceType("JOINED")
  */
-class SystemAccount extends CoreAccountBase implements SystemAccountInterface{
+class SystemAccount extends CoreAccount implements SystemAccountInterface{
+    use SystemAccountTrait;
+
     /**
      * @ORM\OneToMany(targetEntity="SystemAccountRole", mappedBy="account")
      *
@@ -37,39 +41,5 @@ class SystemAccount extends CoreAccountBase implements SystemAccountInterface{
         parent::__construct();
         $this->roles = new ArrayCollection();
         $this->groups = new ArrayCollection();
-    }
-
-    public function addSystemAccountRole(SystemAccountRoleInterface $role)
-    {
-        $this->roles[] = $role;
-
-        return $this;
-    }
-
-    public function removeSystemAccountRole(SystemAccountRoleInterface $role)
-    {
-        $this->roles->removeElement($role);
-    }
-
-    public function getSystemAccountRoles()
-    {
-        return $this->roles->toArray();
-    }
-
-    public function addSystemGroup(SystemGroupInterface $group)
-    {
-        $this->groups[] = $group;
-
-        return $this;
-    }
-
-    public function removeSystemGroup(SystemGroupInterface $group)
-    {
-        $this->groups->removeElement($group);
-    }
-
-    public function getSystemGroups()
-    {
-        return $this->groups->toArray();
     }
 }

@@ -11,7 +11,7 @@ interface SystemUserInterface extends SystemAccountInterface{
      *
      * @return SystemUserInterface
      */
-    public function setSalt($salt);
+    public function setSalt(string $salt);
 
     /**
      * Get salt
@@ -27,7 +27,7 @@ interface SystemUserInterface extends SystemAccountInterface{
      *
      * @return SystemUserInterface
      */
-    public function setPassword($password);
+    public function setPassword(string $password);
 
     /**
      * Get password
