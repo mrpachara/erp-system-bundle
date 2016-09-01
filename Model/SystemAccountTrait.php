@@ -1,4 +1,5 @@
 <?php
+
 namespace Erp\Bundle\SystemBundle\Model;
 
 use Erp\Bundle\SystemBundle\Model\SystemAccountRoleInterface;
@@ -8,37 +9,49 @@ use Erp\Bundle\SystemBundle\Model\SystemGroupInterface;
  * System account Trait
  */
 trait SystemAccountTrait{
-    public function addSystemAccountRole(SystemAccountRoleInterface $role)
-    {
+    /**
+     * @inheritDoc
+     */
+    public function addRole(SystemAccountRoleInterface $role){
         $this->roles[] = $role;
 
         return $this;
     }
 
-    public function removeSystemAccountRole(SystemAccountRoleInterface $role)
-    {
+    /**
+     * @inheritDoc
+     */
+    public function removeRole(SystemAccountRoleInterface $role){
         $this->roles->removeElement($role);
     }
 
-    public function getSystemAccountRoles()
-    {
+    /**
+     * @inheritDoc
+     */
+    public function getRoles(){
         return $this->roles->toArray();
     }
 
-    public function addSystemGroup(SystemGroupInterface $group)
-    {
+    /**
+     * @inheritDoc
+     */
+    public function addGroup(SystemGroupInterface $group){
         $this->groups[] = $group;
 
         return $this;
     }
 
-    public function removeSystemGroup(SystemGroupInterface $group)
-    {
+    /**
+     * @inheritDoc
+     */
+    public function removeGroup(SystemGroupInterface $group){
         $this->groups->removeElement($group);
     }
 
-    public function getSystemGroups()
-    {
+    /**
+     * @inheritDoc
+     */
+    public function getGroups(){
         return $this->groups->toArray();
     }
 }

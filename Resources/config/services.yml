@@ -1,4 +1,11 @@
 services:
-#    erp_bundle_system.example:
+#    erp_system.example:
 #        class: Erp\Bundle\SystemBundle\Example
 #        arguments: ["@service_id", "plain_value", %parameter%]
+    erp_system.service.system_account:
+        class: Erp\Bundle\SystemBundle\Service\Impl\SystemAccountService
+        arguments: ["@=service('doctrine').getRepository('ErpSystemBundle:SystemAccount')"]
+
+    erp_system.service.system_user:
+        class: Erp\Bundle\SystemBundle\Service\Impl\SystemUserService
+        arguments: ["@=service('doctrine').getRepository('ErpSystemBundle:SystemUser')"]

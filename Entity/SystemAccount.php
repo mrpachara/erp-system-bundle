@@ -1,27 +1,26 @@
 <?php
+
 namespace Erp\Bundle\SystemBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Erp\Bundle\SystemBundle\Model\SystemAccountRoleInterface;
-use Erp\Bundle\SystemBundle\Model\SystemGroupInterface;
-
 use Erp\Bundle\CoreBundle\Entity\CoreAccount;
+use Erp\Bundle\CoreBundle\Model\ThingInterface;
 use Erp\Bundle\SystemBundle\Model\SystemAccountInterface;
 
 use Erp\Bundle\SystemBundle\Model\SystemAccountTrait;
+
 /**
- * @ORM\Entity
- * @ORM\Table(name="system.account")
+ * @ORM\Entity(repositoryClass="Erp\Bundle\SystemBundle\Repository\ORM\SystemAccountRepository")
+ * @ORM\Table(name="system.saccount")
  * @ORM\InheritanceType("JOINED")
  */
 class SystemAccount extends CoreAccount implements SystemAccountInterface{
     use SystemAccountTrait;
 
     /**
-     * @ORM\OneToMany(targetEntity="SystemAccountRole", mappedBy="account")
+     * @ORM\OneToMany(targetEntity="SystemAccountRole", mappedBy="account", cascade={"persist", "merge"}, orphanRemoval=true)
      *
      * @var ArrayCollection
      */
@@ -36,9 +35,11 @@ class SystemAccount extends CoreAccount implements SystemAccountInterface{
 
     /**
      * constructor
+     *
+     * @param ThingInterface $thing
      */
-    public function __construct() {
-        parent::__construct();
+    public function __construct(ThingInterface $thing = null) {
+        parent::__construct($thing);
         $this->roles = new ArrayCollection();
         $this->groups = new ArrayCollection();
     }

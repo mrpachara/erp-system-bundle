@@ -1,10 +1,9 @@
 <?php
+
 namespace Erp\Bundle\SystemBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-
-use Erp\Bundle\SystemBundle\Model\SystemAccountInterface;
 
 use Erp\Bundle\SystemBundle\Model\SystemGroupInterface;
 
@@ -13,6 +12,7 @@ use Erp\Bundle\SystemBundle\Model\SystemGroupTrait;
 /**
  * @ORM\Entity
  * @ORM\Table(name="system.group")
+ * @ORM\InheritanceType("JOINED")
  */
 class SystemGroup extends SystemAccount implements SystemGroupInterface{
     use SystemGroupTrait;

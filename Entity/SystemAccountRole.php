@@ -1,4 +1,5 @@
 <?php
+
 namespace Erp\Bundle\SystemBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -6,14 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Erp\Bundle\SystemBundle\Model\SystemAccountInterface;
 
 use Erp\Bundle\SystemBundle\Model\SystemAccountRoleInterface;
-use Symfony\Component\Security\Core\Role\RoleInterface as SymfonyRoleInterface;
 
 use Erp\Bundle\SystemBundle\Model\SystemAccountRoleTrait;
 /**
  * @ORM\Entity
  * @ORM\Table(name="system.accountrole", uniqueConstraints={@ORM\UniqueConstraint(columns={"id_system_account", "role"})})
  */
-class SystemAccountRole implements SystemAccountRoleInterface, SymfonyRoleInterface{
+class SystemAccountRole implements SystemAccountRoleInterface{
     use SystemAccountRoleTrait;
 
     /**
@@ -35,8 +35,11 @@ class SystemAccountRole implements SystemAccountRoleInterface, SymfonyRoleInterf
 
     /**
      * constructor
+     *
+     * @param string $role
      */
-    public function __construct() {
+    public function __construct(string $role = null) {
         parent::__construct();
+        $this->$role = $role;
     }
 }

@@ -1,9 +1,12 @@
 <?php
+
 namespace Erp\Bundle\SystemBundle\Model;
+
+use Symfony\Component\Security\Core\Role\RoleInterface as SymfonyRoleInterface;
 
 /**
  */
-interface SystemAccountRoleInterface{
+interface SystemAccountRoleInterface extends SymfonyRoleInterface{
     /**
      * Set role
      *

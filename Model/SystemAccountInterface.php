@@ -5,6 +5,7 @@ namespace Erp\Bundle\SystemBundle\Model;
 use Erp\Bundle\CoreBundle\Model\CoreAccountInterface;
 
 /**
+ * System account Interface
  */
 interface SystemAccountInterface extends CoreAccountInterface{
     /**
@@ -14,21 +15,21 @@ interface SystemAccountInterface extends CoreAccountInterface{
      *
      * @return SystemAccountInterface
      */
-    public function addSystemAccountRole(SystemAccountRoleInterface $role);
+    public function addRole(SystemAccountRoleInterface $role);
 
     /**
      * Remove role
      *
      * @param SystemAccountRoleInterface $role
      */
-    public function removeSystemAccountRole(SystemAccountRoleInterface $role);
+    public function removeRole(SystemAccountRoleInterface $role);
 
     /**
      * Get roles
      *
-     * @return array
+     * @return SystemAccountRoleInterface[]
      */
-    public function getSystemAccountRoles();
+    public function getRoles();
 
     /**
      * Add system group
@@ -37,19 +38,19 @@ interface SystemAccountInterface extends CoreAccountInterface{
      *
      * @return SystemAccountInterface
      */
-    public function addSystemGroup(SystemGroupInterface $group);
+    public function addGroup(SystemGroupInterface $group);
 
     /**
      * Remove system group
      *
-     * @param GroupInterface $group
+     * @param SystemGroupInterface $group
      */
-    public function removeSystemGroup(SystemGroupInterface $group);
+    public function removeGroup(SystemGroupInterface $group);
 
     /**
      * Get system groups
      *
-     * @return array
+     * @return SystemGroupInterface[]
      */
-    public function getSystemGroups();
+    public function getGroups();
 }

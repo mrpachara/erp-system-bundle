@@ -1,4 +1,5 @@
 <?php
+
 namespace Erp\Bundle\SystemBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -11,6 +12,7 @@ use Erp\Bundle\SystemBundle\Model\SystemClientTrait;
 /**
  * @ORM\Entity
  * @ORM\Table(name="system.client")
+ * @ORM\InheritanceType("JOINED")
  */
 class SystemClient extends SystemAccount implements SystemClientInterface, FOSClientInterface{
     use SystemClientTrait;

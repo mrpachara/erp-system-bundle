@@ -1,24 +1,20 @@
 <?php
+
 namespace Erp\Bundle\SystemBundle\Model;
+
+use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 
 /**
  */
-interface SystemUserInterface extends SystemAccountInterface{
+interface SystemUserInterface extends SystemAccountInterface, SymfonyUserInterface{
     /**
-     * Set salt
+     * Set username
      *
-     * @param string $salt
+     * @param string $username
      *
      * @return SystemUserInterface
      */
-    public function setSalt(string $salt);
-
-    /**
-     * Get salt
-     *
-     * @return string
-     */
-    public function getSalt();
+    public function setUsername(string $username);
 
     /**
      * Set password
@@ -30,9 +26,18 @@ interface SystemUserInterface extends SystemAccountInterface{
     public function setPassword(string $password);
 
     /**
-     * Get password
+     * Set plain password
+     *
+     * @param string $plainPassword
+     *
+     * @return SystemUserInterface
+     */
+    public function setPlainPassword(string $plainPassword);
+
+    /**
+     * Get plain password
      *
      * @return string
      */
-    public function getPassword();
+    public function getPlainPassword();
 }
