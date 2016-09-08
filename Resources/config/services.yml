@@ -9,3 +9,11 @@ services:
     erp_system.service.system_user:
         class: Erp\Bundle\SystemBundle\Service\Impl\SystemUserService
         arguments: ["@=service('doctrine').getRepository('ErpSystemBundle:SystemUser')"]
+
+    erp_system.service.system_client:
+        class: Erp\Bundle\SystemBundle\Service\Impl\SystemClientService
+        arguments: ["@=service('doctrine').getRepository('ErpSystemBundle:SystemClient')"]
+
+    erp_system.service.system_group:
+        class: Erp\Bundle\SystemBundle\Service\Impl\SystemGroupService
+        arguments: ["@=service('doctrine').getRepository('ErpSystemBundle:SystemGroup')"]

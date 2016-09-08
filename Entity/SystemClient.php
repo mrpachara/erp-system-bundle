@@ -4,17 +4,17 @@ namespace Erp\Bundle\SystemBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Erp\Bundle\CoreBundle\Model\ThingInterface;
 use Erp\Bundle\SystemBundle\Model\SystemClientInterface;
-use FOS\OAuthServerBundle\Model\ClientInterface as FOSClientInterface;
 
 use Erp\Bundle\SystemBundle\Model\SystemClientTrait;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Erp\Bundle\SystemBundle\Repository\ORM\SystemClientRepository")
  * @ORM\Table(name="system.client")
  * @ORM\InheritanceType("JOINED")
  */
-class SystemClient extends SystemAccount implements SystemClientInterface, FOSClientInterface{
+class SystemClient extends SystemAccount implements SystemClientInterface{
     use SystemClientTrait;
 
     /**
@@ -25,9 +25,27 @@ class SystemClient extends SystemAccount implements SystemClientInterface, FOSCl
     private $secret;
 
     /**
-     * constructor
+     * @ORM\Column(type="simple_array", nullable=true)
+     *
+     * @var string
      */
-    public function __construct() {
-        parent::__construct();
+    private $redirectUris;
+
+    /**
+     * @ORM\Column(type="simple_array", nullable=true)
+     *
+     * @var string
+     */
+    private $allowedGrantTypes;
+
+    /**
+     * constructor
+     *
+     * @param ThingInterface $thing
+     */
+    public function __construct(ThingInterface $thing = null) {
+        parent::__construct($thing);
+        $this->redirectUris = [];
+        $this->allowedGrantTypes = [];
     }
 }

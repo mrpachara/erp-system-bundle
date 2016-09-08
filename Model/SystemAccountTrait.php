@@ -2,7 +2,8 @@
 
 namespace Erp\Bundle\SystemBundle\Model;
 
-use Erp\Bundle\SystemBundle\Model\SystemAccountRoleInterface;
+use JMS\Serializer\Annotation as JMSSerializer;
+
 use Erp\Bundle\SystemBundle\Model\SystemGroupInterface;
 
 /**
@@ -12,8 +13,8 @@ trait SystemAccountTrait{
     /**
      * @inheritDoc
      */
-    public function addRole(SystemAccountRoleInterface $role){
-        $this->roles[] = $role;
+    public function addIndividualRole(string $role){
+        if(!in_array($role, $this->roles)) $this->roles[] = $role;
 
         return $this;
     }
@@ -21,22 +22,49 @@ trait SystemAccountTrait{
     /**
      * @inheritDoc
      */
-    public function removeRole(SystemAccountRoleInterface $role){
-        $this->roles->removeElement($role);
+    public function removeIndividualRole(string $role){
+        unset($this->roles[array_search($role, $this->roles)]);
     }
 
     /**
      * @inheritDoc
+     *
+     * @JMSSerializer\VirtualProperty
+     * @JMSSerializer\Type("array")
+     */
+    public function getIndividualRoles(){
+        return $this->roles;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @JMSSerializer\VirtualProperty
+     * @JMSSerializer\Type("array")
      */
     public function getRoles(){
-        return $this->roles->toArray();
+        $roles = $this->getIndividualRoles();
+
+        $groups = $this->getSystemGroups();
+
+        for($i = 0; $i < count($groups); $i++){
+            foreach($groups[$i]->getSystemGroups() as $group){
+                if(!in_array($group, $groups)){
+                    $groups[] = $group;
+                }
+            }
+
+            $roles = array_merge($roles, $groups[$i]->getIndividualRoles());
+        }
+
+        return array_unique($roles);
     }
 
     /**
      * @inheritDoc
      */
-    public function addGroup(SystemGroupInterface $group){
-        $this->groups[] = $group;
+    public function addSystemGroup(SystemGroupInterface $group){
+        if(!in_array($group, $this->groups)) $this->groups[] = $group;
 
         return $this;
     }
@@ -44,14 +72,17 @@ trait SystemAccountTrait{
     /**
      * @inheritDoc
      */
-    public function removeGroup(SystemGroupInterface $group){
+    public function removeSystemGroup(SystemGroupInterface $group){
         $this->groups->removeElement($group);
     }
 
     /**
      * @inheritDoc
+     *
+     * @JMSSerializer\VirtualProperty
+     * @JMSSerializer\Type("array")
      */
-    public function getGroups(){
+    public function getSystemGroups(){
         return $this->groups->toArray();
     }
 }

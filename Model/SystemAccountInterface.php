@@ -9,25 +9,32 @@ use Erp\Bundle\CoreBundle\Model\CoreAccountInterface;
  */
 interface SystemAccountInterface extends CoreAccountInterface{
     /**
-     * Add role
+     * Add indeividual role
      *
-     * @param SystemAccountRoleInterface $role
+     * @param string $role
      *
      * @return SystemAccountInterface
      */
-    public function addRole(SystemAccountRoleInterface $role);
+    public function addIndividualRole(string $role);
 
     /**
-     * Remove role
+     * Remove indeividual role
      *
-     * @param SystemAccountRoleInterface $role
+     * @param string $role
      */
-    public function removeRole(SystemAccountRoleInterface $role);
+    public function removeIndividualRole(string $role);
+
+    /**
+     * Get indeividual roles
+     *
+     * @return string[]
+     */
+    public function getIndividualRoles();
 
     /**
      * Get roles
      *
-     * @return SystemAccountRoleInterface[]
+     * @return string[]
      */
     public function getRoles();
 
@@ -38,19 +45,19 @@ interface SystemAccountInterface extends CoreAccountInterface{
      *
      * @return SystemAccountInterface
      */
-    public function addGroup(SystemGroupInterface $group);
+    public function addSystemGroup(SystemGroupInterface $group);
 
     /**
      * Remove system group
      *
      * @param SystemGroupInterface $group
      */
-    public function removeGroup(SystemGroupInterface $group);
+    public function removeSystemGroup(SystemGroupInterface $group);
 
     /**
      * Get system groups
      *
      * @return SystemGroupInterface[]
      */
-    public function getGroups();
+    public function getSystemGroups();
 }

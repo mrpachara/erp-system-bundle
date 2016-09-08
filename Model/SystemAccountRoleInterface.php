@@ -8,6 +8,13 @@ use Symfony\Component\Security\Core\Role\RoleInterface as SymfonyRoleInterface;
  */
 interface SystemAccountRoleInterface extends SymfonyRoleInterface{
     /**
+     * Get id
+     *
+     * @return string
+     */
+    public function getId();
+
+    /**
      * Set role
      *
      * @param string $role

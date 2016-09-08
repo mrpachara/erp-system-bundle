@@ -2,6 +2,8 @@
 
 namespace Erp\Bundle\SystemBundle\Model;
 
+use JMS\Serializer\Annotation as JMSSerializer;
+
 /**
  * System user Trait
  */
@@ -41,7 +43,7 @@ trait SystemUserTrait{
      * @inheritDoc
      */
     public function getPassword(){
-        return $this->password;
+        return ($this->credentialErased)? null : $this->password;
     }
 
     /**
@@ -53,6 +55,8 @@ trait SystemUserTrait{
 
     /**
      * @inheritDoc
+     *
+     * @JMSSerializer\VirtualProperty
      */
     public function getUsername(){
         return $this->getCode();
@@ -69,7 +73,7 @@ trait SystemUserTrait{
     /**
      * @inheritDoc
      */
-    public function setPlainPassword(string $plainPassword){
+    public function setPlainPassword(string $plainPassword = null){
         $this->plainPassword = $plainPassword;
 
         return $this;
@@ -77,6 +81,8 @@ trait SystemUserTrait{
 
     /**
      * @inheritDoc
+     *
+     * @JMSSerializer\VirtualProperty
      */
     public function getPlainPassword(){
         return $this->plainPassword;

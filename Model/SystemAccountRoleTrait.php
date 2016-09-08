@@ -2,12 +2,23 @@
 
 namespace Erp\Bundle\SystemBundle\Model;
 
+use JMS\Serializer\Annotation as JMSSerializer;
+
 use Erp\Bundle\SystemBundle\Model\SystemAccountInterface;
 
 /**
  * System account_role Trait
  */
 trait SystemAccountRoleTrait{
+    /**
+     * @inheritDoc
+     *
+     * @JMSSerializer\VirtualProperty
+     */
+    public function getId(){
+        return $this->id;
+    }
+
     /**
      * @inheritDoc
      */
@@ -19,6 +30,8 @@ trait SystemAccountRoleTrait{
 
     /**
      * @inheritDoc
+     *
+     * @JMSSerializer\VirtualProperty
      */
     public function getRole(){
         return $this->role;
@@ -38,5 +51,12 @@ trait SystemAccountRoleTrait{
      */
     public function getSystemAccount(){
         return $this->account;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __toString(){
+        return $this->getSystemAccount().':'.$this->getRole();
     }
 }

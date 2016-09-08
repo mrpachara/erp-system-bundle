@@ -3,6 +3,8 @@
 namespace Erp\Bundle\SystemBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMSSerializer;
+
 use Erp\Bundle\CoreBundle\Model\ThingInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,6 +16,8 @@ use Erp\Bundle\SystemBundle\Model\SystemUserTrait;
  * @ORM\Entity(repositoryClass="Erp\Bundle\SystemBundle\Repository\ORM\SystemUserRepository")
  * @ORM\Table(name="system.user")
  * @ORM\InheritanceType("JOINED")
+ *
+ * @JMSSerializer\ExclusionPolicy("all")
  */
 class SystemUser extends SystemAccount implements SystemUserInterface{
     use SystemUserTrait;

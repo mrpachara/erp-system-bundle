@@ -9,19 +9,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateUserCommand extends AbstractCreateAccountCommand{
+class CreateGroupCommand extends AbstractCreateAccountCommand{
     protected function configure(){
         $this
-            ->setName('ErpSystem:CreateUser')
-            ->setDescription('Create a basic OAuth2 user')
+            ->setName('ErpSystem:CreateGroup')
+            ->setDescription('Create a basic OAuth2 client')
             ->setDefinition(
                 new InputDefinition([
                     new InputOption('role', 'r', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, "The role of account"),
                     new InputOption('group', 'g', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, "The group of account"),
 
-                    new InputArgument('code', InputArgument::REQUIRED, 'The users unique username'),
-                    new InputArgument('password', InputArgument::REQUIRED, 'The users password (plaintext)'),
-                    new InputArgument('name', InputArgument::OPTIONAL, 'The full-name of user')
+                    new InputArgument('code', InputArgument::REQUIRED, 'The group code'),
+                    new InputArgument('name', InputArgument::OPTIONAL, 'The full-name of group'),
                 ])
             )
         ;
@@ -31,21 +30,17 @@ class CreateUserCommand extends AbstractCreateAccountCommand{
         parent::execute($input, $output);
 
         try {
-            $service = $this->getContainer()->get('erp_system.service.system_user');
+            $service = $this->getContainer()->get('erp_system.service.system_group');
             $class = $service->getClassName();
             $entity = new $class();
 
             $this->setAccountProperty($entity, $input);
 
-            $entity->setPlainPassword($input->getArgument('password'));
-            $password = $this->getContainer()->get('security.password_encoder')->encodePassword($entity, $entity->getPlainPassword());
-            $entity->setPassword($password);
-
             $service->save($entity);
 
-            $output->writeln('<fg=green>User ' . $entity->getCode() . ' created</fg=green>');
+            $output->writeln('<fg=green>Group ' . $entity->getCode() . ' created</fg=green>');
         } catch (\Doctrine\DBAL\DBALException $e){
-            $output->writeln('<fg=red>Unable to create user ' . $input->getArgument('code') . '</fg=red>');
+            $output->writeln('<fg=red>Unable to create group ' . $input->getArgument('code') . '</fg=red>');
             $output->writeln('<fg=red>'.$e->getMessage().'</fg=red>');
 
             return;
