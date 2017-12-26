@@ -2,47 +2,102 @@
 
 namespace Erp\Bundle\SystemBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMSSerializer;
-
-use Erp\Bundle\CoreBundle\Model\ThingInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use Erp\Bundle\SystemBundle\Model\SystemUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 
-use Erp\Bundle\SystemBundle\Model\SystemUserTrait;
+use Erp\Bundle\CoreBundle\Entity\Thing;
 
 /**
- * @ORM\Entity(repositoryClass="Erp\Bundle\SystemBundle\Repository\ORM\SystemUserRepository")
- * @ORM\Table(name="system.user")
- * @ORM\InheritanceType("JOINED")
- *
- * @JMSSerializer\ExclusionPolicy("all")
+ * System User Entity
  */
-class SystemUser extends SystemAccount implements SystemUserInterface{
-    use SystemUserTrait;
-
+class SystemUser extends SystemAccount implements SymfonyUserInterface{
     /**
      * @Assert\NotBlank()
      * @Assert\Length(max=4096)
      *
      * @var string
      */
-    private $plainPassword;
+    protected $plainPassword;
 
     /**
-     * @ORM\Column(type="string", length=128)
-     *
      * @var string
      */
-    private $password;
+    protected $password;
 
     /**
      * constructor
      *
-     * @param ThingInterface $thing
+     * @param Thing $thing
      */
-    public function __construct(ThingInterface $thing = null) {
+    public function __construct(Thing $thing = null) {
         parent::__construct($thing);
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     *
+     * @return SystemUser
+     */
+    public function setUsername(string $username){
+        return $this->setCode($username);
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     *
+     * @return SystemUser
+     */
+    public function setPassword(string $password){
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get plain password
+     *
+     * @return string
+     */
+    public function getPlainPassword(){
+        return $this->plainPassword;
+    }
+
+    /**
+    * Set plain password
+    *
+    * @param string $plainPassword
+    *
+    * @return SystemUser
+     */
+    public function setPlainPassword(string $plainPassword = null){
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    /*
+     * SymfonyUserInterface
+     */
+
+    public function getUsername(){
+       return $this->getCode();
+    }
+
+    public function getSalt(){
+     return null;
+    }
+
+    public function getPassword(){
+       return ($this->credentialErased)? null : $this->password;
+    }
+
+    public function eraseCredentials(){
+       $this->credentialErased = true;
+       $this->setPlainPassword(null);
     }
 }

@@ -1,0 +1,5 @@
+Erp\Bundle\SystemBundle\Entity\SystemGroup:
+  access_type: property
+  properties:
+    accounts:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\SystemBundle\Entity\SystemAccount>

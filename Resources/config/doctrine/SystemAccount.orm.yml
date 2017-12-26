@@ -1,0 +1,25 @@
+Erp\Bundle\SystemBundle\Entity\SystemAccount:
+  type: entity
+  repositoryClass: Erp\Bundle\SystemBundle\Infrastructure\ORM\Repository\SystemAccountRepository
+  table: system_account
+  inheritanceType: JOINED
+  fields:
+    individualRoles:
+      type: simple_array
+      nullable: true
+  manyToMany:
+    systemGroups:
+      targetEntity: SystemGroup
+      inversedBy: accounts
+      joinTable:
+        name: system_groupaccount
+        joinColumns:
+          joinColumn:
+            name: id_system_account
+            nullable: false
+            onDelete: CASCADE
+        inverseJoinColumns:
+          joinColumn:
+            name: id_system_group
+            nullable: false
+            onDelete: CASCADE

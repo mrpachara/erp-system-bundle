@@ -1,0 +1,9 @@
+Erp\Bundle\SystemBundle\Entity\SystemGroup:
+  type: entity
+  repositoryClass: Erp\Bundle\SystemBundle\Infrastructure\ORM\Repository\SystemGroupRepository
+  table: system_group
+  inheritanceType: JOINED
+  manyToMany:
+    accounts:
+      targetEntity: SystemAccount
+      mappedBy: systemGroups

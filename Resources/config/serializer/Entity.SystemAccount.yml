@@ -1,0 +1,11 @@
+Erp\Bundle\SystemBundle\Entity\SystemAccount:
+  access_type: property
+  properties:
+    individualRoles:
+      type: array<string>
+    systemGroups:
+      type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\SystemBundle\Entity\SystemGroup>
+  virtual_properties:
+    getRoles:
+      serialized_name: roles
+      type: array<string>

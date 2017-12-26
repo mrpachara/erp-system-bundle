@@ -1,0 +1,5 @@
+Erp\Bundle\SystemBundle\Entity\SystemUser:
+  access_type: property
+  properties:
+    password:
+      exclude: true
