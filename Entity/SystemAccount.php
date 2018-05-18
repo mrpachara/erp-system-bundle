@@ -9,7 +9,11 @@ use Erp\Bundle\CoreBundle\Entity\Thing;
 /**
  * System Account Entity
  */
-abstract class SystemAccount extends CoreAccount{
+abstract class SystemAccount extends CoreAccount
+{
+    /** @var string */
+    protected $systemId;
+
     /**
      * @var string[]
      */
@@ -25,10 +29,35 @@ abstract class SystemAccount extends CoreAccount{
      *
      * @param Thing|null $thing
      */
-    public function __construct(Thing $thing = null) {
+    public function __construct(Thing $thing = null)
+    {
         parent::__construct($thing);
         $this->individualRoles = [];
         $this->systemGroups = new ArrayCollection();
+    }
+
+    /**
+     * Get systemId
+     *
+     * @return string
+     */
+    public function getSystemId()
+    {
+        return $this->systemId;
+    }
+
+    /**
+     * Set systemId
+     *
+     * @param string $systemId
+     *
+     * @return static
+     */
+    public function setSystemId($systemId)
+    {
+        $this->systemId = $systemId;
+
+        return $this;
     }
 
     /**
@@ -36,7 +65,12 @@ abstract class SystemAccount extends CoreAccount{
      *
      * @return string[]
      */
-    public function getIndividualRoles(){
+    public function getIndividualRoles()
+    {
+        if (null === $this->individualRoles) {
+            $this->individualRoles = [];
+        }
+
         return $this->individualRoles;
     }
 
@@ -47,7 +81,8 @@ abstract class SystemAccount extends CoreAccount{
      *
      * @return SystemAccount
      */
-    public function setIndividualRoles(array $individualRoles){
+    public function setIndividualRoles(array $individualRoles)
+    {
         $this->individualRoles = $individualRoles;
 
         return $this;
@@ -60,8 +95,11 @@ abstract class SystemAccount extends CoreAccount{
      *
      * @return SystemAccount
      */
-    public function addIndividualRole(string $role){
-        if(!in_array($role, $this->individualRoles)) $this->individualRoles[] = $role;
+    public function addIndividualRole(string $role)
+    {
+        if (!in_array($role, $this->individualRoles)) {
+            $this->individualRoles[] = $role;
+        }
 
         return $this;
     }
@@ -71,7 +109,8 @@ abstract class SystemAccount extends CoreAccount{
      *
      * @param string $role
      */
-    public function removeIndividualRole(string $role){
+    public function removeIndividualRole(string $role)
+    {
         unset($this->individualRoles[array_search($role, $this->individualRoles)]);
     }
 
@@ -80,14 +119,20 @@ abstract class SystemAccount extends CoreAccount{
      *
      * @return string[]
      */
-    public function getRoles(){
+    public function getRoles()
+    {
+        return array_map(function($value) { return 'ROLE_'.$value; }, $this->getRealRoles());
+    }
+
+    public function getRealRoles()
+    {
         $roles = $this->getIndividualRoles();
 
         $groups = $this->getSystemGroups();
 
-        for($i = 0; $i < count($groups); $i++){
-            foreach($groups[$i]->getSystemGroups() as $group){
-                if(!in_array($group, $groups)){
+        for ($i = 0; $i < count($groups); $i++) {
+            foreach ($groups[$i]->getSystemGroups() as $group) {
+                if (!in_array($group, $groups, true)) {
                     $groups[] = $group;
                 }
             }
@@ -103,7 +148,8 @@ abstract class SystemAccount extends CoreAccount{
      *
      * @return SystemGroup[]
      */
-    public function getSystemGroups(){
+    public function getSystemGroups()
+    {
         return $this->systemGroups->toArray();
     }
 
@@ -114,9 +160,11 @@ abstract class SystemAccount extends CoreAccount{
      *
      * @return SystemAccount
      */
-    public function addSystemGroup(SystemGroup $systemGroup){
-        if(!$this->systemGroups->contains($systemGroup))
-          $this->systemGroups[] = $systemGroup;
+    public function addSystemGroup(SystemGroup $systemGroup)
+    {
+        if (!$this->systemGroups->contains($systemGroup)) {
+            $this->systemGroups[] = $systemGroup;
+        }
 
         return $this;
     }
@@ -126,7 +174,8 @@ abstract class SystemAccount extends CoreAccount{
      *
      * @param SystemGroup $systemGroup
      */
-    public function removeSystemGroup(SystemGroup $systemGroup){
+    public function removeSystemGroup(SystemGroup $systemGroup)
+    {
         $this->systemGroups->removeElement($systemGroup);
     }
 }

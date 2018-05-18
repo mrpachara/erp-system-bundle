@@ -9,8 +9,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  */
 class UserCommand extends AbstractAccountCommand{
-    protected function getReposityService(){
-        return $this->getContainer()->get('erp_system.service.system_user');
+    protected $query;
+
+    /** @required */
+    public function setQuery(\Erp\Bundle\SystemBundle\Domain\CQRS\SystemUserQuery $query)
+    {
+        $this->query = $query;
     }
 
     protected function configure(){
@@ -18,7 +22,7 @@ class UserCommand extends AbstractAccountCommand{
 
         $this
             ->setName('ErpSystem:User')
-            ->setDescription('Create a basic OAuth2 user')
+            ->setDescription('Create a basic System user')
         ;
 
         $this->getDefinition()->addArguments([
@@ -45,12 +49,12 @@ class UserCommand extends AbstractAccountCommand{
                     $entity->setPassword($password);
                 }
 
-                $this->getReposityService()->save($entity);
+                $this->getCommand()->save($entity);
 
                 $output->writeln('<fg=green>User ' . $entity->getCode() . ' created</fg=green>');
             }
         } catch (\Doctrine\DBAL\DBALException $e){
-            $output->writeln('<fg=red>Unable to create user ' . $input->getArgument('code') . '</fg=red>');
+            $output->writeln('<fg=red>Unable to create user ' . $input->getArgument('systemId') . '</fg=red>');
             $output->writeln('<fg=red>'.$e->getMessage().'</fg=red>');
 
             return;

@@ -5,7 +5,8 @@ Erp\Bundle\SystemBundle\Entity\SystemAccount:
       type: array<string>
     systemGroups:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\SystemBundle\Entity\SystemGroup>
+      max_depth: 1
   virtual_properties:
-    getRoles:
+    getRealRoles:
       serialized_name: roles
       type: array<string>

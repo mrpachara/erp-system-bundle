@@ -10,8 +10,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  */
 class ClientCommand extends AbstractAccountCommand{
-    protected function getReposityService(){
-        return $this->getContainer()->get('erp_system.service.system_client');
+    protected function getQuery(){
+        return $this->getContainer()->get('erp_system.service.query.system_group');
     }
 
     protected function configure(){
@@ -53,7 +53,7 @@ class ClientCommand extends AbstractAccountCommand{
                     if(!empty($value)) $entity->addRedirectUri($value);
                 }
 
-                $this->getReposityService()->save($entity);
+                $this->getCommand()->save($entity);
 
                 $output->writeln('<fg=green>Client ' . $entity->getCode() . ' with secret ' . $entity->getSecret() . ' created</fg=green>');
             }

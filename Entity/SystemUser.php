@@ -11,7 +11,8 @@ use Erp\Bundle\CoreBundle\Entity\Thing;
 /**
  * System User Entity
  */
-class SystemUser extends SystemAccount implements SymfonyUserInterface{
+class SystemUser extends SystemAccount implements SymfonyUserInterface
+{
     /**
      * @Assert\NotBlank()
      * @Assert\Length(max=4096)
@@ -26,11 +27,17 @@ class SystemUser extends SystemAccount implements SymfonyUserInterface{
     protected $password;
 
     /**
+     * @var bool
+     */
+    protected $credentialErased = false;
+
+    /**
      * constructor
      *
      * @param Thing $thing
      */
-    public function __construct(Thing $thing = null) {
+    public function __construct(Thing $thing = null)
+    {
         parent::__construct($thing);
     }
 
@@ -39,10 +46,11 @@ class SystemUser extends SystemAccount implements SymfonyUserInterface{
      *
      * @param string $username
      *
-     * @return SystemUser
+     * @return static
      */
-    public function setUsername(string $username){
-        return $this->setCode($username);
+    public function setUsername(string $username)
+    {
+        return $this->setSystemId($username);
     }
 
     /**
@@ -50,9 +58,10 @@ class SystemUser extends SystemAccount implements SymfonyUserInterface{
      *
      * @param string $password
      *
-     * @return SystemUser
+     * @return static
      */
-    public function setPassword(string $password){
+    public function setPassword(string $password)
+    {
         $this->password = $password;
 
         return $this;
@@ -63,7 +72,8 @@ class SystemUser extends SystemAccount implements SymfonyUserInterface{
      *
      * @return string
      */
-    public function getPlainPassword(){
+    public function getPlainPassword()
+    {
         return $this->plainPassword;
     }
 
@@ -74,30 +84,47 @@ class SystemUser extends SystemAccount implements SymfonyUserInterface{
     *
     * @return SystemUser
      */
-    public function setPlainPassword(string $plainPassword = null){
+    public function setPlainPassword(string $plainPassword = null)
+    {
         $this->plainPassword = $plainPassword;
 
         return $this;
     }
 
-    /*
+    /**************************
      * SymfonyUserInterface
+     **************************/
+
+    /**
+     * {@inheritDoc}
      */
-
-    public function getUsername(){
-       return $this->getCode();
+    public function getUsername()
+    {
+        return $this->getSystemId();
     }
 
-    public function getSalt(){
-     return null;
+    /**
+     * {@inheritDoc}
+     */
+    public function getSalt()
+    {
+        return null;
     }
 
-    public function getPassword(){
-       return ($this->credentialErased)? null : $this->password;
+    /**
+     * {@inheritDoc}
+     */
+    public function getPassword()
+    {
+        return ($this->credentialErased)? null : $this->password;
     }
 
-    public function eraseCredentials(){
-       $this->credentialErased = true;
-       $this->setPlainPassword(null);
+    /**
+     * {@inheritDoc}
+     */
+    public function eraseCredentials()
+    {
+        $this->credentialErased = true;
+        $this->setPlainPassword(null);
     }
 }

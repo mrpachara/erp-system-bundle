@@ -1,6 +1,6 @@
 Erp\Bundle\SystemBundle\Entity\SystemGroup:
   type: entity
-  repositoryClass: Erp\Bundle\SystemBundle\Infrastructure\ORM\Repository\SystemGroupRepository
+  #repositoryClass: Erp\Bundle\SystemBundle\Infrastructure\ORM\Repository\SystemGroupRepository
   table: system_group
   inheritanceType: JOINED
   manyToMany:

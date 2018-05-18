@@ -1,6 +1,6 @@
 Erp\Bundle\SystemBundle\Entity\SystemClient:
   type: entity
-  repositoryClass: Erp\Bundle\SystemBundle\Infrastructure\ORM\Repository\SystemClientRepository
+  #repositoryClass: Erp\Bundle\SystemBundle\Infrastructure\ORM\Repository\SystemClientRepository
   table: system_client
   inheritanceType: JOINED
   fields:

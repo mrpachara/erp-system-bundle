@@ -2,9 +2,11 @@
 
 namespace Erp\Bundle\SystemBundle\Command;
 
-use Erp\Bundle\CoreBundle\Model\CoreAccountInterface;
-use Erp\Bundle\CoreBundle\Repository\ErpRepositoryInterface;
-use Erp\Bundle\SystemBundle\Service\SystemGroupServiceInterface;
+use Erp\Bundle\CoreBundle\Domain\CQRS\SimpleCommand;
+
+use Erp\Bundle\SystemBundle\Entity\SystemAccount;
+use Erp\Bundle\SystemBundle\Domain\CQRS\SystemAccountQuery;
+use Erp\Bundle\SystemBundle\Domain\CQRS\SystemGroupQuery;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -16,29 +18,47 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class AbstractAccountCommand extends ContainerAwareCommand{
     /**
-     * @var SystemGroupServiceInterface
-     */
-    private $systemGroupService;
-
-    /**
      * @var bool
      */
-    private $readonly = false;
+    protected $readonly = false;
+
+    protected $query;
 
     /**
-     * Get Repository Service
+     * Get Query Service
      *
-     * @return ErpRepositoryInterface
+     * @return SystemAccountQuery
      */
-    protected abstract function getReposityService();
+    protected function getQuery()
+    {
+        return $this->query;
+    }
+
+    protected $simpleCommand;
+
+    /** @required */
+    public function setSimpleCommand(\Erp\Bundle\CoreBundle\Domain\CQRS\SimpleCommand $simpleCommand)
+    {
+        $this->simpleCommand = $simpleCommand;
+    }
+
+    /**
+     * Get Command Service
+     *
+     * @return SimpleCommand
+     */
+    protected function getCommand() {
+        //return $this->getContainer()->get('Erp\Bundle\CoreBundle\Domain\CQRS\SimpleCommand');
+        return $this->simpleCommand;
+    }
 
     /**
      * Get System group Service
      *
-     * @return SystemGroupServiceInterface
+     * @return SystemGroupQuery
      */
-    protected function getSystemGroupService(){
-        return $this->systemGroupService;
+    protected function getSystemGroupQuery(){
+        return $this->getContainer()->get('Erp\Bundle\SystemBundle\Domain\CQRS\SystemGroupQuery');
     }
 
     /**
@@ -58,7 +78,7 @@ abstract class AbstractAccountCommand extends ContainerAwareCommand{
             new InputOption('role', 'r', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, "The role of account (+/-)"),
             new InputOption('group', 'g', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, "The group of account (+/-)"),
 
-            new InputArgument('code', InputArgument::OPTIONAL, 'The unique account code'),
+            new InputArgument('systemId', InputArgument::OPTIONAL, 'The unique system ID'),
             new InputArgument('name', InputArgument::OPTIONAL, 'The full-name of account'),
         ]));
     }
@@ -69,11 +89,9 @@ abstract class AbstractAccountCommand extends ContainerAwareCommand{
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @return CoreAccountInterface
+     * @return SystemAccount
      */
     protected function preprocess(InputInterface $input, OutputInterface $output){
-        $this->systemGroupService = $this->getContainer()->get('erp_system.service.system_group');
-
         foreach($input->getArguments() as $key => $value){
             if("~" === $value){
                 $input->setArgument($key, null);
@@ -90,25 +108,25 @@ abstract class AbstractAccountCommand extends ContainerAwareCommand{
         }
 
         $entity = null;
-        $repositoryService = $this->getReposityService();
+        $query = $this->getQuery();
         if($input->getOption('list')){
             $this->readonly = true;
-            return $repositoryService->findAll();
+            return $query->findAll();
         } else{
-            if(empty($input->getArgument('code'))){
-                throw new \Exception('code required!!!');
+            if(empty($input->getArgument('systemId'))){
+                throw new \Exception('systemId required!!!');
             }
 
             if($input->getOption('update')){
-                $entity = $repositoryService->findOneByCode($input->getArgument('code'));
+                $entity = $query->findOneBySystemId($input->getArgument('systemId'));
 
                 if(!empty($input->getArgument('name'))) $entity->setName($input->getArgument('name'));
             } else{
-                $className = $repositoryService->getClassName();
+                $className = $query->getClassName();
                 $entity = new $className();
 
-                $entity->setCode($input->getArgument('code'));
-                $entity->setName(empty($input->getArgument('name'))? $input->getArgument('code') : $input->getArgument('name'));
+                $entity->setSystemId($input->getArgument('systemId'));
+                $entity->setName(empty($input->getArgument('name'))? $input->getArgument('systemId') : $input->getArgument('name'));
             }
 
             foreach((array)$input->getOption('role') as $roles){

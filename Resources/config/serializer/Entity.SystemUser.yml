@@ -1,5 +1,14 @@
 Erp\Bundle\SystemBundle\Entity\SystemUser:
   access_type: property
   properties:
+    username:
+      type: string
+      accessor:
+        getter: getUsername
+        setter: setUsername
+    plainPassword:
+      type: string
     password:
+      exclude: true
+    credentialErased:
       exclude: true

@@ -1,9 +1,19 @@
 Erp\Bundle\SystemBundle\Entity\SystemAccount:
   type: entity
-  repositoryClass: Erp\Bundle\SystemBundle\Infrastructure\ORM\Repository\SystemAccountRepository
+  #repositoryClass: Erp\Bundle\SystemBundle\Infrastructure\ORM\Repository\SystemAccountRepository
   table: system_account
+  indexes:
+    # the name of the index
+    system_account_system_id_uidx:
+      columns: [ system_id ]
   inheritanceType: JOINED
   fields:
+    systemId:
+      name: system_id
+      type: string
+      length: 64
+      unique: true
+      nullable: false
     individualRoles:
       type: simple_array
       nullable: true

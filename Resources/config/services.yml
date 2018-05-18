@@ -1,45 +1,51 @@
+parameters:
+  container.autowiring.strict_mode: true
+
 services:
-#    erp_system.example:
-#        class: Erp\Bundle\SystemBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
 
-  #CQRS
-  erp_system.cqrs.system_account:
-    class: Erp\Bundle\CoreBundle\Domain\CQRS\CQRSContainer
-    arguments:
-      - "@=service('doctrine').getRepository('ErpSystemBundle:SystemAccount')"
-      - "@=service('doctrine').getRepository('ErpSystemBundle:SystemAccount')"
+  _defaults:
+    # automatically injects dependencies in your services
+    autowire: true
+    # automatically registers your services as commands, event subscribers, etc.
+    autoconfigure: true
+    # this means you cannot fetch services directly from the container via $container->get()
+    # if you need to do this, you can override this setting on individual services
+    public: false
 
-  erp_system.cqrs.system_client:
-    class: Erp\Bundle\CoreBundle\Domain\CQRS\CQRSContainer
-    arguments:
-      - "@=service('doctrine').getRepository('ErpSystemBundle:SystemClient')"
-      - "@=service('doctrine').getRepository('ErpSystemBundle:SystemClient')"
+  Erp\Bundle\SystemBundle\:
+    resource: '../../*'
+    # you can exclude directories or files
+    # but if a service is unused, it's removed anyway
+    exclude: '../../{Collection,Entity,Infrastructure/ORM/Repository}'
 
-  erp_system.cqrs.system_group:
-    class: Erp\Bundle\CoreBundle\Domain\CQRS\CQRSContainer
-    arguments:
-      - "@=service('doctrine').getRepository('ErpSystemBundle:SystemGroup')"
-      - "@=service('doctrine').getRepository('ErpSystemBundle:SystemGroup')"
+  Erp\Bundle\SystemBundle\Controller\:
+    resource: '../../Controller'
+    tags: ['controller.service_arguments']
 
-  erp_system.cqrs.system_user:
-    class: Erp\Bundle\CoreBundle\Domain\CQRS\CQRSContainer
-    arguments:
-      - "@=service('doctrine').getRepository('ErpSystemBundle:SystemUser')"
-      - "@=service('doctrine').getRepository('ErpSystemBundle:SystemUser')"
+  #--------- global --------------
+  # erp_system.service.user_provider:
+  #   class: Erp\Bundle\SystemBundle\Service\UserProvider
+  #   arguments:
+  #     - "@erp_system.service.query.system_user"
 
-#    erp_system.service.system_account:
-#        class: Erp\Bundle\SystemBundle\Service\Impl\SystemAccountService
-#        arguments: ["@=service('doctrine').getRepository('ErpSystemBundle:SystemAccount')"]
-#
-#    erp_system.service.system_user:
-#        class: Erp\Bundle\SystemBundle\Service\Impl\SystemUserService
-#        arguments: ["@=service('doctrine').getRepository('ErpSystemBundle:SystemUser')"]
-#
-#    erp_system.service.system_client:
-#        class: Erp\Bundle\SystemBundle\Service\Impl\SystemClientService
-#        arguments: ["@=service('doctrine').getRepository('ErpSystemBundle:SystemClient')"]
-#
-#    erp_system.service.system_group:
-#        class: Erp\Bundle\SystemBundle\Service\Impl\SystemGroupService
-#        arguments: ["@=service('doctrine').getRepository('ErpSystemBundle:SystemGroup')"]
+  # CQRS
+  #Erp\Bundle\SystemBundle\Infrastructure\ORM\Service\SystemCommandHandlerService:
+  #  arguments:
+  #    - "@doctrine.orm.default_entity_manager"
+
+  #Erp\Bundle\SystemBundle\Domain\CQRS\SystemCommandHandler: '@Erp\Bundle\SystemBundle\Infrastructure\ORM\Service\SystemCommandHandlerService'
+
+  Erp\Bundle\SystemBundle\Domain\CQRS\SystemAccountQuery: '@Erp\Bundle\SystemBundle\Infrastructure\ORM\Service\SystemAccountQueryService'
+  Erp\Bundle\SystemBundle\Domain\CQRS\SystemUserQuery: '@Erp\Bundle\SystemBundle\Infrastructure\ORM\Service\SystemUserQueryService'
+  Erp\Bundle\SystemBundle\Domain\CQRS\SystemGroupQuery: '@Erp\Bundle\SystemBundle\Infrastructure\ORM\Service\SystemGroupQueryService'
+
+  #Entity Listerner
+  Erp\Bundle\SystemBundle\Infrastructure\ORM\Listener\SystemUserListener:
+    class: Erp\Bundle\SystemBundle\Infrastructure\ORM\Listener\SystemUserListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\SystemBundle\Entity\SystemUser, event: preFlush }
+
+  Erp\Bundle\SystemBundle\Infrastructure\ORM\Listener\SystemGroupListener:
+    class: Erp\Bundle\SystemBundle\Infrastructure\ORM\Listener\SystemGroupListener
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\SystemBundle\Entity\SystemGroup, event: preFlush }

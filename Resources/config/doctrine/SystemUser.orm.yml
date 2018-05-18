@@ -1,6 +1,6 @@
 Erp\Bundle\SystemBundle\Entity\SystemUser:
   type: entity
-  repositoryClass: Erp\Bundle\SystemBundle\Infrastructure\ORM\Repository\SystemUserRepository
+  #repositoryClass: Erp\Bundle\SystemBundle\Infrastructure\ORM\Repository\SystemUserRepository
   table: system_user
   inheritanceType: JOINED
   fields:

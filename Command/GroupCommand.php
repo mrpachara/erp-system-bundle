@@ -8,7 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  */
 class GroupCommand extends AbstractAccountCommand{
-    protected function getReposityService(){
+    protected function getQuery(){
         return $this->getContainer()->get('erp_system.service.system_group');
     }
 
