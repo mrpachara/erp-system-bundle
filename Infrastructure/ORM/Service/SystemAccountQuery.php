@@ -10,8 +10,8 @@ abstract class SystemAccountQuery extends ParentQuery implements QueryInterface
     public function searchOptions() {
         $result = parent::searchOptions();
 
-        $result['search']['fields'] = array_values(array_diff($result['search']['fields'], ['code']));
-        $result['search']['fields'][] = 'systemId';
+        $result['term']['fields'] = array_values(array_diff($result['term']['fields'], ['code']));
+        $result['term']['fields'][] = 'systemId';
 
         array_unshift($result['order']['fields'], 'systemId ASC');
 
