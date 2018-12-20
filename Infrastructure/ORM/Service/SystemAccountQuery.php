@@ -17,4 +17,30 @@ abstract class SystemAccountQuery extends ParentQuery implements QueryInterface
 
         return $result;
     }
+    
+    /**
+     * @var SystemAccountQueryHelper
+     */
+    protected $queryHelper;
+    
+    /** @required */
+    public function setQueryHelper(SystemAccountQueryHelper $queryHelper)
+    {
+        $this->queryHelper = $queryHelper;
+    }
+    
+    public function findAll()
+    {
+        $alias = '_entity';
+        $qb = $this->queryHelper->exceptSpecial($this->repository->createQueryBuilder($alias), $alias);
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    public function searchQueryBuilder(array $params, string $alias = null, &$context = null)
+    {
+        $alias = (empty($alias))? '_entity' : $alias;
+        
+        return $this->queryHelper->exceptSpecial(parent::searchQueryBuilder($params, $alias, $context), $alias);
+    }
 }
