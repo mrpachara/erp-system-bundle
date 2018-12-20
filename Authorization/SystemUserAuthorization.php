@@ -13,31 +13,31 @@ class SystemUserAuthorization extends AbstractSystemAccountAuthorization
 // '
 // )));
         return parent::list(...$args) &&
-            ($this->authorizationChecker->isGranted('ROLE_ADMIN') || $this->authorizationChecker->isGranted('ROLE_LIST_SYSTEM_USER'))
+            ($this->authorizationChecker->isGranted('ROLE_ADMIN') || $this->authorizationChecker->isGranted('ROLE_SYSTEM_USER_LIST'))
         ;
     }
     
     public function get(...$args) {
         return parent::get(...$args) &&
-            ($this->authorizationChecker->isGranted('ROLE_ADMIN') || $this->authorizationChecker->isGranted('ROLE_VIEW_SYSTEM_USER'))
+            ($this->authorizationChecker->isGranted('ROLE_ADMIN') || $this->authorizationChecker->isGranted('ROLE_SYSTEM_USER_VIEW'))
         ;
     }
     
     public function add(...$args) {
         return parent::add(...$args) &&
-            ($this->authorizationChecker->isGranted('ROLE_ADMIN') || $this->authorizationChecker->isGranted('ROLE_CREATE_SYSTEM_USER'))
+            ($this->authorizationChecker->isGranted('ROLE_ADMIN') || $this->authorizationChecker->isGranted('ROLE_SYSTEM_USER_CREATE'))
         ;
     }
     
     public function edit(...$args) {
         return parent::edit(...$args) &&
-            ($this->authorizationChecker->isGranted('ROLE_ADMIN') || $this->authorizationChecker->isGranted('ROLE_EDIT_SYSTEM_USER'))
+            ($this->authorizationChecker->isGranted('ROLE_ADMIN') || $this->authorizationChecker->isGranted('ROLE_SYSTEM_USER_EDIT'))
         ;
     }
     
     public function delete(...$args) {
         return parent::delete(...$args) &&
-            ($this->authorizationChecker->isGranted('ROLE_ADMIN') || $this->authorizationChecker->isGranted('ROLE_DELETE_SYSTEM_USER'))
+            ($this->authorizationChecker->isGranted('ROLE_ADMIN') || $this->authorizationChecker->isGranted('ROLE_SYSTEM_USER_DELETE'))
         ;
     }
 }
