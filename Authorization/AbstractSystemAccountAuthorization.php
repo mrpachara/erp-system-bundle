@@ -2,6 +2,8 @@
 
 namespace Erp\Bundle\SystemBundle\Authorization;
 
+use Erp\Bundle\SystemBundle\Entity\SystemAccount;
+
 abstract class AbstractSystemAccountAuthorization extends AbstractSystemAuthorization
 {
     public function list(...$args) {
@@ -39,17 +41,19 @@ abstract class AbstractSystemAccountAuthorization extends AbstractSystemAuthoriz
             return true;
         }
         
-        if($item->getSystemId() === 'root') {
-            return false;
-        }
-        
-        if($item->getSystemId() === 'admin') {
-            if(($type === 'add') || ($type === 'delete')) {
+        if($item instanceof SystemAccount) {
+            if($item->getSystemId() === 'root') {
                 return false;
             }
             
-            if($type === 'edit') {
-                return $this->authorizationChecker->isGranted('ROLE_ADMIN');
+            if($item->getSystemId() === 'admin') {
+                if(($type === 'add') || ($type === 'delete')) {
+                    return false;
+                }
+                
+                if($type === 'edit') {
+                    return $this->authorizationChecker->isGranted('ROLE_ADMIN');
+                }
             }
         }
         
