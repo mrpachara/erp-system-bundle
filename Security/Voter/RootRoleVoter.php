@@ -1,10 +1,10 @@
 <?php
-namespace Erp\Bundle\SystemBundle\Security;
+namespace Erp\Bundle\SystemBundle\Security\Voter;
 
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Role\RoleInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Erp\Bundle\SystemBundle\Entity\SystemUser;
 
 /**
  *
@@ -51,7 +51,7 @@ class RootRoleVoter extends Voter
     {
         $user = $token->getUser();
         
-        if($user instanceof UserInterface) {
+        if($user instanceof SystemUser) {
             return 'root' === $user->getUsername();
         }
         

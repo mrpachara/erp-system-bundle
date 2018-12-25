@@ -7,11 +7,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 
 use Erp\Bundle\CoreBundle\Entity\Thing;
+use Symfony\Component\Security\Core\Encoder\EncoderAwareInterface;
 
 /**
  * System User Entity
  */
-class SystemUser extends SystemAccount implements SymfonyUserInterface
+class SystemUser extends SystemAccount implements SymfonyUserInterface, EncoderAwareInterface
 {
     /**
      * @Assert\NotBlank()
@@ -126,5 +127,16 @@ class SystemUser extends SystemAccount implements SymfonyUserInterface
     {
         $this->credentialErased = true;
         $this->setPlainPassword(null);
+    }
+    
+    /**
+     * {@inheritDoc}
+     * @see \Symfony\Component\Security\Core\Encoder\EncoderAwareInterface::getEncoderName()
+     */
+    public function getEncoderName()
+    {
+        if('root' === $this->getUsername()) return 'system_specific_password';
+        
+        return null;
     }
 }
