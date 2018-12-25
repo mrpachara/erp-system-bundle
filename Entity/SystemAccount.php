@@ -141,7 +141,7 @@ abstract class SystemAccount extends CoreAccount
         }
         
         if($this->getSystemId() === 'admin') $roles[] = 'ADMIN';
-
+        
         return array_unique((array)$roles);
     }
 
