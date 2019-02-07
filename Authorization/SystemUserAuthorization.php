@@ -25,7 +25,7 @@ class SystemUserAuthorization extends AbstractSystemAccountAuthorization
     
     public function add(...$args) {
         return parent::add(...$args) &&
-            ($this->authorizationChecker->isGranted('ROLE_ADMIN') || $this->authorizationChecker->isGranted('ROLE_SYSTEM_USER_CREATE'))
+            ($this->authorizationChecker->isGranted('ROLE_SYSTEM_USER_CREATE'))
         ;
     }
     
