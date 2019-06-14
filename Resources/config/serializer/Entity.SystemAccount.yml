@@ -10,3 +10,4 @@ Erp\Bundle\SystemBundle\Entity\SystemAccount:
     getRealRoles:
       serialized_name: roles
       type: array<string>
+      max_depth: 1
