@@ -5,6 +5,9 @@ namespace Erp\Bundle\SystemBundle\Entity;
 use Erp\Bundle\CoreBundle\Collection\ArrayCollection;
 use Erp\Bundle\CoreBundle\Entity\CoreAccount;
 use Erp\Bundle\CoreBundle\Entity\Thing;
+use Erp\Bundle\SystemBundle\Domain\CQRS\AllowedRolesService;
+use Erp\Bundle\SystemBundle\Domain\CQRS\FullAllowedRolesService;
+use InvalidArgumentException;
 
 /**
  * System Account Entity
@@ -25,6 +28,11 @@ abstract class SystemAccount extends CoreAccount
     protected $systemGroups;
 
     /**
+     * @var AllowedRolesService
+     */
+    protected $allowedRolesService;
+
+    /**
      * constructor
      *
      * @param Thing|null $thing
@@ -34,6 +42,12 @@ abstract class SystemAccount extends CoreAccount
         parent::__construct($thing);
         $this->individualRoles = [];
         $this->systemGroups = new ArrayCollection();
+        $this->allowedRolesService = FullAllowedRolesService::getInstance();
+    }
+
+    public function setAllowedRolesService(AllowedRolesService $allowedRolesService)
+    {
+        $this->allowedRolesService = $allowedRolesService;
     }
 
     /**
@@ -67,11 +81,31 @@ abstract class SystemAccount extends CoreAccount
      */
     public function getIndividualRoles()
     {
-        if (null === $this->individualRoles) {
-            $this->individualRoles = [];
+        if (
+            (null !== $this->getId()) &&
+            ($this->allowedRolesService instanceof FullAllowedRolesService)
+        ) {
+            throw new InvalidArgumentException('allowedRolesService must be set');
         }
 
-        return $this->individualRoles;
+        $roles = $this->individualRoles;
+        if ($this->getSystemId() === 'admin') $roles[] = 'SYSTEM_ROLE_MANAGEABLE';
+
+        // if (null === $this->individualRoles) {
+        //     $this->individualRoles = [];
+        // }
+
+        // if (null === $this->allowedRolesService) {
+        //     $this->allowedRolesService = FullAllowedRolesService::getInstance();
+        // }
+
+        return array_values(
+            $this->allowedRolesService->filter(
+                array_filter($roles, function ($role) {
+                    return 'ROOT' !== $role;
+                })
+            )
+        );
     }
 
     /**
@@ -121,7 +155,9 @@ abstract class SystemAccount extends CoreAccount
      */
     public function getRoles()
     {
-        return array_map(function($value) { return 'ROLE_'.$value; }, $this->getRealRoles());
+        return array_map(function ($value) {
+            return 'ROLE_' . $value;
+        }, $this->getRealRoles());
     }
 
     public function getRealRoles()
@@ -132,6 +168,10 @@ abstract class SystemAccount extends CoreAccount
 
         for ($i = 0; $i < count($groups); $i++) {
             foreach ($groups[$i]->getSystemGroups() as $group) {
+                if ($this === $group) {
+                    continue;
+                }
+
                 if (!in_array($group, $groups, true)) {
                     $groups[] = $group;
                 }
@@ -139,10 +179,10 @@ abstract class SystemAccount extends CoreAccount
 
             $roles = array_merge($roles, (array)$groups[$i]->getIndividualRoles());
         }
-        
-        if($this->getSystemId() === 'admin') $roles[] = 'ADMIN';
-        
-        return array_unique((array)$roles);
+
+        if ($this->getSystemId() === 'admin') $roles[] = 'ADMIN';
+
+        return array_values(array_unique((array)$roles));
     }
 
     /**

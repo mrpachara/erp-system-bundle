@@ -1,4 +1,5 @@
 <?php
+
 namespace Erp\Bundle\SystemBundle\Security\Encoder;
 
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
@@ -6,7 +7,7 @@ use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 /**
  *
  * @author pachara
- *        
+ *
  */
 class SystemSpecificPasswordEncoder implements PasswordEncoderInterface
 {
@@ -25,7 +26,7 @@ class SystemSpecificPasswordEncoder implements PasswordEncoderInterface
      */
     public function isPasswordValid($encoded, $raw, $salt)
     {
-        return !empty($raw) && ($this->password === $raw);
+        return !empty($raw) && \hash_equals($this->password, $raw);
     }
 
     /**
@@ -38,4 +39,3 @@ class SystemSpecificPasswordEncoder implements PasswordEncoderInterface
         return null;
     }
 }
-

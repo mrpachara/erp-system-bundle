@@ -45,7 +45,7 @@ class SystemUserApiCommandController extends SystemAccountApiCommand
 
     protected function prepareItemAfterPatch($item)
     {
-        if(!empty($item->getPlainPassword())) {
+        if (!empty($item->getPlainPassword())) {
             $password = $this->passwordEncoder->encodePassword($item, $item->getPlainPassword());
             $item->setPassword($password);
         }

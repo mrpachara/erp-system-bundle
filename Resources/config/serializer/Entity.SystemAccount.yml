@@ -1,8 +1,12 @@
 Erp\Bundle\SystemBundle\Entity\SystemAccount:
   access_type: property
   properties:
+    allowedRolesService:
+      exclude: true
     individualRoles:
       type: array<string>
+      accessor:
+        getter: getIndividualRoles
     systemGroups:
       type: Erp\Bundle\CoreBundle\Collection\ArrayCollection<Erp\Bundle\SystemBundle\Entity\SystemGroup>
       max_depth: 1

@@ -21,11 +21,11 @@ services:
   Erp\Bundle\SystemBundle\Controller\:
     resource: '../../Controller'
     tags: ['controller.service_arguments']
-  
+
   Erp\Bundle\SystemBundle\Security\Encoder\SystemSpecificPasswordEncoder:
     arguments:
       - "%system_password%"
-    
+
   #--------- global --------------
   # erp_system.service.user_provider:
   #   class: Erp\Bundle\SystemBundle\Service\UserProvider
@@ -45,11 +45,16 @@ services:
 
   #Entity Listerner
   Erp\Bundle\SystemBundle\Infrastructure\ORM\Listener\SystemUserListener:
-    class: Erp\Bundle\SystemBundle\Infrastructure\ORM\Listener\SystemUserListener
+    # class: Erp\Bundle\SystemBundle\Infrastructure\ORM\Listener\SystemUserListener
     tags:
       - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\SystemBundle\Entity\SystemUser, event: preFlush }
 
   Erp\Bundle\SystemBundle\Infrastructure\ORM\Listener\SystemGroupListener:
-    class: Erp\Bundle\SystemBundle\Infrastructure\ORM\Listener\SystemGroupListener
+    # class: Erp\Bundle\SystemBundle\Infrastructure\ORM\Listener\SystemGroupListener
     tags:
       - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\SystemBundle\Entity\SystemGroup, event: preFlush }
+
+  Erp\Bundle\SystemBundle\Infrastructure\ORM\Listener\SystemAccountListener:
+    tags:
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\SystemBundle\Entity\SystemAccount, event: postLoad }
+      - { name: doctrine.orm.entity_listener, entity: Erp\Bundle\SystemBundle\Entity\SystemAccount, event: prePersist }
