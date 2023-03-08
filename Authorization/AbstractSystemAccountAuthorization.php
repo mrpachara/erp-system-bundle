@@ -9,31 +9,31 @@ abstract class AbstractSystemAccountAuthorization extends AbstractSystemAuthoriz
     public function list(...$args)
     {
         return parent::list(...$args) &&
-            $this->specialRole('list', ...$args);
+            $this->itemNotSpecialRole('list', ...$args);
     }
 
     public function get(...$args)
     {
         return parent::get(...$args) &&
-            $this->specialRole('get', ...$args);
+            $this->itemNotSpecialRole('get', ...$args);
     }
 
     public function add(...$args)
     {
         return parent::add(...$args) &&
-            $this->specialRole('add', ...$args);
+            $this->itemNotSpecialRole('add', ...$args);
     }
 
     public function edit(...$args)
     {
         return parent::edit(...$args) &&
-            $this->specialRole('edit', ...$args);
+            $this->itemNotSpecialRole('edit', ...$args);
     }
 
     public function delete(...$args)
     {
         return parent::delete(...$args) &&
-            $this->specialRole('delete', ...$args);
+            $this->itemNotSpecialRole('delete', ...$args);
     }
 
     public function manageRole(...$args)
@@ -49,7 +49,7 @@ abstract class AbstractSystemAccountAuthorization extends AbstractSystemAuthoriz
             );
     }
 
-    protected function specialRole($type, $item = null)
+    protected function itemNotSpecialRole($type, $item = null)
     {
         if (empty($item)) {
             return true;

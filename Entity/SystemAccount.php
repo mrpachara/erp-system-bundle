@@ -89,7 +89,26 @@ abstract class SystemAccount extends CoreAccount
         }
 
         $roles = $this->individualRoles;
-        if ($this->getSystemId() === 'admin') $roles[] = 'SYSTEM_ROLE_MANAGEABLE';
+        if ($this->getSystemId() === 'admin') {
+            $roles[] = 'SYSTEM_ACCESS';
+
+            $roles[] = 'SYSTEM_USER_ACCESS';
+            $roles[] = 'SYSTEM_USER_LIST';
+            $roles[] = 'SYSTEM_USER_VIEW';
+            // NOTE: Can admin add user?
+            $roles[] = 'SYSTEM_USER_CREATE';
+            $roles[] = 'SYSTEM_USER_EDIT';
+            $roles[] = 'SYSTEM_USER_DELETE';
+
+            $roles[] = 'SYSTEM_GROUP_ACCESS';
+            $roles[] = 'SYSTEM_GROUP_LIST';
+            $roles[] = 'SYSTEM_GROUP_VIEW';
+            $roles[] = 'SYSTEM_GROUP_CREATE';
+            $roles[] = 'SYSTEM_GROUP_EDIT';
+            $roles[] = 'SYSTEM_GROUP_DELETE';
+
+            $roles[] = 'SYSTEM_ROLE_MANAGEABLE';
+        }
 
         // if (null === $this->individualRoles) {
         //     $this->individualRoles = [];
